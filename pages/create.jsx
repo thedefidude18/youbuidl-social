@@ -16,7 +16,7 @@ export default function Create() {
     <>
       <Head>
         {/** Title */}
-        <title key="title">Share a new post | Orbis Forum</title>
+        <title key="title">what are you Building | Share a new post.</title>
         <meta property="og:title" content="Share a new post | Orbis Forum" key="og_title" />
 
         {/** Description */}
@@ -45,7 +45,7 @@ export default function Create() {
                         <Editor />
                       :
                         <div className="w-full text-center bg-slate-50 rounded border border-primary bg-secondary p-6">
-                          <p className="text-base text-secondary mb-2">You must be connected to share a post in this forum.</p>
+                          <p className="text-base text-secondary mb-2">You must be connected to share a post.</p>
                           <button className="btn-sm py-1.5 btn-main" onClick={() => setConnectModalVis(true)}>Connect</button>
                         </div>
                       }
