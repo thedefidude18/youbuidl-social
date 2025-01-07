@@ -31,7 +31,7 @@ export default function Edit({post}) {
                       <Editor post={post} />
                     :
                       <div className="w-full text-center bg-slate-50 rounded border border-primary p-6">
-                        <p className="text-base text-secondary mb-2">You must be connected to share a post in this forum.</p>
+                        <p className="text-base text-secondary mb-2">You must be connected to share a post on youbuidl.</p>
                         <button className="btn-sm py-1.5 bg-main bg-main-hover" onClick={() => setConnectModalVis(true)}>Connect</button>
                       </div>
                     }
