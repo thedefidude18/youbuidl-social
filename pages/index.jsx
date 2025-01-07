@@ -84,12 +84,12 @@ function Home({defaultPosts}) {
     <>
       <Head>
         {/** Title */}
-        <title key="title">Welcome to youbuidl - A web3 builder community for Public Goods!</title>
-        <meta property="og:title" content="Make this your own community forum | Orbis" key="og_title" />
+        <title key="title">YouBuidl by GiveStation</title>
+        <meta property="og:title" content="Welcome to youbuidl - A web3 builder community for Public Goods!" key="og_title" />
 
         {/** Description */}
-        <meta name="description" content="Build your own community forum powered by Orbis." key="description"></meta>
-        <meta property="og:description" content="Build your own community forum powered by Orbis." key="og_description"/>
+        <meta name="description" content="Welcome to youbuidl" key="description"></meta>
+        <meta property="og:description" content="A web3 builder community for Public Goods!" key="og_description"/>
         <link rel="icon" href="/favicon.png" />
       </Head>
       <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip bg-main">
