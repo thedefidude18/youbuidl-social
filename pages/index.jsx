@@ -107,7 +107,7 @@ function Home({defaultPosts}) {
   title="YouBuidl - A web3 builder community for Public Goods!" 
   description="Connect with other 👨‍💻 builders, 🔼 upvote projects, 💸 fund and 🧭 explore Public Goods."
   className="max-w-4xl mx-auto px-4 py-16 text-center sm:py-24"
-  titleClassName="text-4xl font-bold sm:text-5xl lg:text-6xl"
+  titleClassName="text-4xl font-bold sm:text-5xl lg:text-5xl"
   descriptionClassName="mt-6 text-lg sm:text-xl text-gray-600" 
 />
 
