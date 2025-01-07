@@ -84,7 +84,7 @@ function Home({defaultPosts}) {
     <>
       <Head>
         {/** Title */}
-        <title key="title">YouBuidl by GiveStation</title>
+        <title key="title">YouBuidl | Connect, fund and explore Public Goods.</title>
         <meta property="og:title" content="Welcome to youbuidl - A web3 builder community for Public Goods!" key="og_title" />
 
         {/** Description */}
