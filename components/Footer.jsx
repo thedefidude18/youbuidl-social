@@ -25,7 +25,7 @@ function Footer() {
                 </li>*/}
                 <li>
                   <Link className="text-secondary hover:underline flex flex-row items-center" href="https://useorbis.com/" target="_blank">
-                    Built with <OrbisLogo className="ml-1 mr-1" /> Orbis
+                    Powered by <OrbisLogo className="ml-1 mr-1" /> Orbis
                   </Link>
                 </li>
 
@@ -41,7 +41,7 @@ function Footer() {
                 <Link
                   className="flex justify-center items-center text-brand text-brand-hover"
                   target="_blank"
-                  href="https://twitter.com/useOrbis">
+                  href="https://twitter.com/givestation">
                   <TwitterIcon />
                 </Link>
               </li>
@@ -49,14 +49,14 @@ function Footer() {
                 <Link
                   className="flex justify-center items-center text-brand text-brand-hover"
                   target="_blank"
-                  href="https://github.com/OrbisWeb3/">
+                  href="https://github.com/givestation/">
                   <GithubIcon />
                 </Link>
               </li>
             </ul>
 
             {/* Copyright
-            <div className="text-sm text-secondary">Copyright © Orbis Labs. All rights reserved.</div> */}
+            <div className="text-sm text-secondary">Copyright. All rights reserved.</div> */}
           </div>
         </div>
       </div>
