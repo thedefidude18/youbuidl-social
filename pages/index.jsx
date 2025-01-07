@@ -103,7 +103,7 @@ function Home({defaultPosts}) {
               <Header />
 
               {/* Hero section with main title and description */}
-              <Hero title="👨‍💻 YouBuidl - A web3 builder community for Public Goods!" description="Connect with other 👨‍💻 builders, 🔼 upvote projects, 💸 fund and 🧭 explore Public Goods." />
+              <Hero title="YouBuidl - A web3 builder community for Public Goods!" description="Connect with other 👨‍💻 builders, 🔼 upvote projects, 💸 fund and 🧭 explore Public Goods." />
 
               {/* Page content */}
               <section>
