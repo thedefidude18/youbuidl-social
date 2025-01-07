@@ -84,7 +84,7 @@ function Home({defaultPosts}) {
     <>
       <Head>
         {/** Title */}
-        <title key="title">Make this your own community forum | Orbis</title>
+        <title key="title">Welcome to youbuidl - A web3 builder community for Public Goods!</title>
         <meta property="og:title" content="Make this your own community forum | Orbis" key="og_title" />
 
         {/** Description */}
@@ -103,7 +103,7 @@ function Home({defaultPosts}) {
               <Header />
 
               {/* Hero section with main title and description */}
-              <Hero title="Make this your own community forum!" description="Respectful and good-faith discussion should be the cornerstone of any decision-making process. In trying to enact change, please keep this principle in mind." />
+              <Hero title="Make this your own community forum!" description="Connect with other builders, upvote projects, fund and explore Public Goods." />
 
               {/* Page content */}
               <section>
