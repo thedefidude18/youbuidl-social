@@ -52,7 +52,7 @@ function Header() {
         {/* Logo container */}
         <div className="shrink-0 mr-8 p-4">
           <Link href="/" className="text-primary">
-            <img src="/logo-blue.png" className="h-8" alt="Logo" />
+            <img src="/logo-blue.svg" className="h-8" alt="Logo" />
           </Link>
         </div>
       </div>
