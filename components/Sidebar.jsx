@@ -45,7 +45,7 @@ const RecentDiscussions = () => {
 
   return(
     <div>
-      <div className="text-xs uppercase text-tertiary font-semibold mb-4">Active Discussions</div>
+      <div className="text-xs lowercase text-tertiary font-semibold mb-4">Recent Projects</div>
       <div className="space-y-4">
         {loading ? (
           <div className="flex justify-center p-4">
