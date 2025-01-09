@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import Header from '../components/Header';
@@ -7,11 +7,12 @@ import Sidebar from '../components/Sidebar';
 import PostItem from '../components/PostItem';
 import Footer from '../components/Footer';
 import { LoadingCircle } from "../components/Icons";
-import { Orbis, useOrbis } from "@orbisclub/components";
-import useDidToAddress from "../hooks/useDidToAddress";
+import { Orbis, useOrbis, User } from "@orbisclub/components"; // Add User here
+import { GlobalContext } from "../contexts/GlobalContext";
+import Editor from "../components/Editor"; // Import the Editor component
 
-function Home({defaultPosts}) {
-  const { orbis, user } = useOrbis();
+function Home({ defaultPosts }) {
+  const { orbis, user, setConnectModalVis } = useOrbis();
   const [nav, setNav] = useState("all");
   const [page, setPage] = useState(0);
   const [posts, setPosts] = useState(defaultPosts);
@@ -20,10 +21,9 @@ function Home({defaultPosts}) {
 
   /** Load all of the categories (sub-contexts) available in this forum */
   useEffect(() => {
-    if(global.orbis_context) {
+    if (global.orbis_context) {
       loadContexts();
     }
-
 
     /** Load all categories / contexts under the global forum context */
     async function loadContexts() {
@@ -38,8 +38,8 @@ function Home({defaultPosts}) {
     setPage(0);
 
     /** Load posts */
-    if(global.orbis_context) {
-      if(nav == "all") {
+    if (global.orbis_context) {
+      if (nav == "all") {
         loadPosts(global.orbis_context, true, 0);
       } else {
         loadPosts(nav, true, 0);
@@ -49,8 +49,8 @@ function Home({defaultPosts}) {
 
   /** Will re-load the posts when page is updated */
   useEffect(() => {
-    if(global.orbis_context) {
-      if(nav == "all") {
+    if (global.orbis_context) {
+      if (nav == "all") {
         loadPosts(global.orbis_context, true, page);
       } else {
         loadPosts(nav, true, page);
@@ -63,16 +63,8 @@ function Home({defaultPosts}) {
     setLoading(true);
     let { data, error } = await orbis.api.rpc("get_ranked_posts", { q_context: context }).range(_page * 25, (_page + 1) * 50 - 1);
 
-
-  /*  let { data, error } = await orbis.getPosts({
-      context: context,
-      only_master: true,
-      order_by: 'count_likes',
-      include_child_contexts: include_child_contexts,
-    }, _page, 25);*/
-
     /** Save data in posts state */
-    if(data) {
+    if (data) {
       setPosts(data);
     }
 
@@ -89,103 +81,125 @@ function Home({defaultPosts}) {
 
         {/** Description */}
         <meta name="description" content="Welcome to youbuidl" key="description"></meta>
-        <meta property="og:description" content="A web3 builder community for Public Goods!" key="og_description"/>
+        <meta property="og:description" content="A web3 builder community for Public Goods!" key="og_description" />
         <link rel="icon" href="/favicon.png" />
       </Head>
       <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip bg-main">
         <div className="antialiased">
           <div className="min-h-screen flex">
-
-            {/*  Page content */}
+            {/* Page content */}
             <main className="grow overflow-hidden">
-
-              {/*  Site header */}
+              {/* Site header */}
               <Header />
 
               {/* Hero section with main title and description */}
-<Hero 
-  title="YouBuidl - A web3 builder community for Public Goods!" 
-  description="Connect with other 👨‍💻 builders, 🔼 upvote projects, 💸 fund and 🧭 explore Public Goods."
-  className="max-w-4xl mx-auto px-4 py-16 text-center sm:py-24"
-  titleClassName="text-4xl font-bold sm:text-5xl lg:text-5xl"
-  descriptionClassName="mt-6 text-lg sm:text-xl text-gray-600" 
-/>
+              <Hero />
 
               {/* Page content */}
               <section>
+                {/** Render categories and list of posts if context has already been created otherwise display Dashboard CTA */}
+                {global.orbis_context ? (
+                  <div className="max-w-6xl mx-auto px-4 sm:px-6">
+                    <div className="md:flex md:justify-between">
+                      {/* Main content */}
+                      <div className="md:grow pt-3 pb-12 md:pb-20">
+                        <div className="md:pr-6 lg:pr-10">
+                          {/* Compose Box */}
+                          <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-100 p-4">
+                            {user ? (
+                              <div className="flex space-x-4">
+                                {/* Profile Picture */}
+                                <div className="flex-shrink-0">
+                                  <User details={user} height={40} />
+                                </div>
 
-                      {/** Render categories and list of posts if context has already been created otherwise display Dashboard CTA */}
-                      {global.orbis_context ?
-                        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                          <div className="md:flex md:justify-between">
-
-                            {/* Main content */}
-                            <div className="md:grow pt-3 pb-12 md:pb-20">
-                              <div className="md:pr-6 lg:pr-10">
-                                <CategoriesNavigation categories={categories} nav={nav} setNav={setNav} />
-                                {/** Show loading state or list of posts */}
-                                {loading ?
-                                  <div className="flex w-full justify-center p-3 text-primary">
-                                    <LoadingCircle />
+                                {/* Compose Box */}
+                                <div className="flex-grow">
+                                  <Editor />
+                                  <div className="flex justify-end mt-4">
+                                    <button
+                                      className="btn-sm py-1.5 btn-brand"
+                                      type="submit"
+                                      disabled={!user}
+                                    >
+                                      Post
+                                    </button>
                                   </div>
-                                :
-                                  <>
-                                    {/* Display posts if any */}
-                                    {(posts && posts.length > 0) ?
-                                      <>
-                                        <div className="mb-12">
-                                          <div className="flex flex-col space-y-6 mb-8">
-                                            {posts.map((post) => {
-                                              return (
-                                                <PostItem post={post} key={post.stream_id} />
-                                              );
-                                            })}
-                                          </div>
-
-                                          {/* Handle pagination */}
-                                          {posts && posts.length >= 25 &&
-                                            <div className="text-right">
-                                              <button className="btn-sm py-1.5 h-8 btn-secondary btn-secondary-hover" onClick={() => setPage(page + 1)}>
-                                                Next page <span className="tracking-normal ml-1">-&gt;</span>
-                                              </button>
-                                            </div>
-                                          }
-
-                                        </div>
-                                      </>
-                                    :
-                                      <div className="w-full text-center bg-white/10 rounded border border-primary bg-secondary p-6">
-                                        <p className="text-sm text-secondary">There aren&apos;t any posts shared here.</p>
-                                      </div>
-                                    }
-                                  </>
-                                }
+                                </div>
                               </div>
-                            </div>
-                            <Sidebar />
+                            ) : (
+                              <div className="w-full text-center bg-slate-50 rounded border border-primary bg-secondary p-6">
+                                <p className="text-base text-secondary mb-2">You must be connected to share a post.</p>
+                                <button
+                                  className="btn-sm py-1.5 btn-main"
+                                  onClick={() => setConnectModalVis(true)}
+                                >
+                                  Connect
+                                </button>
+                              </div>
+                            )}
                           </div>
+
+                          <CategoriesNavigation categories={categories} nav={nav} setNav={setNav} />
+                          {/** Show loading state or list of posts */}
+                          {loading ? (
+                            <div className="flex w-full justify-center p-3 text-primary">
+                              <LoadingCircle />
+                            </div>
+                          ) : (
+                            <>
+                              {/* Display posts if any */}
+                              {posts && posts.length > 0 ? (
+                                <>
+                                  <div className="mb-12">
+                                    <div className="flex flex-col space-y-6 mb-8">
+                                      {posts.map((post) => (
+                                        <PostItem post={post} key={post.stream_id} />
+                                      ))}
+                                    </div>
+
+                                    {/* Handle pagination */}
+                                    {posts && posts.length >= 25 && (
+                                      <div className="text-right">
+                                        <button
+                                          className="btn-sm py-1.5 h-8 btn-secondary btn-secondary-hover"
+                                          onClick={() => setPage(page + 1)}
+                                        >
+                                          Next page <span className="tracking-normal ml-1">-&gt;</span>
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
+                                </>
+                              ) : (
+                                <div className="w-full text-center bg-white/10 rounded border border-primary bg-secondary p-6">
+                                  <p className="text-sm text-secondary">There aren&apos;t any posts shared here.</p>
+                                </div>
+                              )}
+                            </>
+                          )}
                         </div>
-                      :
-                        <div className="flex flex-col md:pr-6 lg:pr-10 items-center">
-                          <p className="text-base text-primary">To get started you need to create your own context using our Dashboard.</p>
-                          <ol className="text-base list-decimal text-sm text-primary list-inside text-center justify-center mt-3 w-2/3">
-                            <li className="text-base">Visit our Dashboard and create your own <b>Project</b> and <b>Context</b>.</li>
-                            <li className="text-base">Create categories for your community by adding <b>sub-contexts</b> to the context you just created.</li>
-                            <li className="text-base">Go into <b>_app.js</b> and update the <b>global.orbis_context</b> value.</li>
-                          </ol>
-                          <Link href="https://useorbis.com/dashboard" target="_blank" className="btn-sm py-1.5 btn-main mt-6">Go to Dashboard</Link>
-
-                        </div>
-                      }
-
-
-
+                      </div>
+                      <Sidebar />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col md:pr-6 lg:pr-10 items-center">
+                    <p className="text-base text-primary">To get started you need to create your own context using our Dashboard.</p>
+                    <ol className="text-base list-decimal text-sm text-primary list-inside text-center justify-center mt-3 w-2/3">
+                      <li className="text-base">Visit our Dashboard and create your own <b>Project</b> and <b>Context</b>.</li>
+                      <li className="text-base">Create categories for your community by adding <b>sub-contexts</b> to the context you just created.</li>
+                      <li className="text-base">Go into <b>_app.js</b> and update the <b>global.orbis_context</b> value.</li>
+                    </ol>
+                    <Link href="https://useorbis.com/dashboard" target="_blank" className="btn-sm py-1.5 btn-main mt-6">Go to Dashboard</Link>
+                  </div>
+                )}
               </section>
             </main>
           </div>
         </div>
 
-        {/*  Site footer */}
+        {/* Site footer */}
         <Footer />
       </div>
     </>
@@ -193,7 +207,7 @@ function Home({defaultPosts}) {
 }
 
 const CategoriesNavigation = ({ categories, nav, setNav }) => {
-  return(
+  return (
     <div className="border-b border-primary pb-6 mb-6">
       <div className="text-center md:text-left md:flex justify-between items-center">
         {/* Right: Button */}
@@ -203,24 +217,27 @@ const CategoriesNavigation = ({ categories, nav, setNav }) => {
 
         {/* Left: Links */}
         <ul className="grow inline-flex flex-wrap text-sm font-medium -mx-3 -my-1">
-          <NavItem selected={nav} category={{stream_id: "all", content: {displayName: "All"}}} onClick={setNav} />
-          {categories.map((category, key) => {
-            return (
-              <NavItem key={key} selected={nav} category={category} onClick={setNav} />
-            );
-          })}
+          <NavItem selected={nav} category={{ stream_id: "all", content: { displayName: "All" } }} onClick={setNav} />
+          {categories.map((category, key) => (
+            <NavItem key={key} selected={nav} category={category} onClick={setNav} />
+          ))}
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
-const NavItem = ({selected, category, onClick}) => {
-  return(
+const NavItem = ({ selected, category, onClick }) => {
+  return (
     <li className="px-3 py-1">
-      <span className={`relative transition duration-150 ease-in-out ${selected == category.stream_id ? "text-brand underline underline-offset-4" : "cursor-pointer text-secondary hover:underline"}`} onClick={() => onClick(category.stream_id)}>{category.content.displayName}</span>
+      <span
+        className={`relative transition duration-150 ease-in-out ${selected == category.stream_id ? "text-brand underline underline-offset-4" : "cursor-pointer text-secondary hover:underline"}`}
+        onClick={() => onClick(category.stream_id)}
+      >
+        {category.content.displayName}
+      </span>
     </li>
-  )
-}
+  );
+};
 
 export default Home;
