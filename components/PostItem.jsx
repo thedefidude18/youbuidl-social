@@ -1,21 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { User, useOrbis } from "@orbisclub/components";
 import { shortAddress } from "../utils";
 import { CommentsIcon, ShareIcon } from "./Icons";
 import ReactTimeAgo from 'react-time-ago';
-import Image from 'next/image';
 
 export default function PostItem({ post, isLastPost }) {
   const { orbis, user } = useOrbis();
   const [hasLiked, setHasLiked] = useState(false);
   const [updatedPost, setUpdatedPost] = useState(post);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  // Handle missing post data
-  if (!post) {
-    return <div>No post data available.</div>;
-  }
 
   /** Check if user liked this post */
   useEffect(() => {
@@ -24,19 +18,15 @@ export default function PostItem({ post, isLastPost }) {
     }
 
     async function getReaction() {
-      try {
-        let { data, error } = await orbis.getReaction(post.stream_id, user.did);
-        if (data && data.type === "like") {
-          setHasLiked(true);
-        }
-      } catch (error) {
-        console.error("Error fetching reaction:", error);
+      let { data, error } = await orbis.getReaction(post.stream_id, user.did);
+      if (data && data.type && data.type == "like") {
+        setHasLiked(true);
       }
     }
-  }, [user, orbis, post.stream_id]); // Add missing dependencies
+  }, [user]);
 
   /** Will like / upvote the post */
-  const like = useCallback(async () => {
+  async function like() {
     if (user) {
       setHasLiked(true);
       setIsAnimating(true); // Trigger animation
@@ -44,22 +34,19 @@ export default function PostItem({ post, isLastPost }) {
         ...updatedPost,
         count_likes: post.count_likes + 1,
       });
-      try {
-        let res = await orbis.react(post.stream_id, "like");
-        console.log("res:", res);
-      } catch (error) {
-        console.error("Error liking post:", error);
-      } finally {
-        setTimeout(() => setIsAnimating(false), 500);
-      }
+      let res = await orbis.react(post.stream_id, "like");
+      console.log("res:", res);
+
+      // Reset animation after 500ms
+      setTimeout(() => setIsAnimating(false), 500);
     } else {
       alert("You must be connected to react to posts.");
     }
-  }, [user, orbis, post.stream_id, updatedPost, post.count_likes]);
+  }
 
   /** Will clean description by shortening it and remove some markdown structure */
-  const cleanDescription = useCallback(() => {
-    if (post.content?.body) {
+  function cleanDescription() {
+    if (post.content.body) {
       let desc = post.content.body;
       const regexImage = /\!\[Image ALT tag\]\((.*?)\)/;
       const regexUrl = /\[(.*?)\]\(.*?\)/;
@@ -68,10 +55,13 @@ export default function PostItem({ post, isLastPost }) {
 
       if (desc) {
         return desc.substring(0, 180) + "...";
+      } else {
+        return null;
       }
+    } else {
+      return null;
     }
-    return null;
-  }, [post.content]);
+  }
 
   return (
     <>
@@ -98,7 +88,7 @@ export default function PostItem({ post, isLastPost }) {
             {/* Post Title */}
             <h2 className="text-lg font-semibold text-gray-900 mt-1">
               <Link href={"/post/" + post.stream_id} className="hover:underline">
-                {post.content?.title || "Untitled Post"}
+                {post.content.title}
               </Link>
             </h2>
 
@@ -151,7 +141,7 @@ export default function PostItem({ post, isLastPost }) {
               {/* Proof Badge */}
               {post.stream_id && (
                 <a
-                  href={`https://cerscan.com/${post.stream_id}`}
+                  href={`https://cerscan.com/${post.stream_id}`} // Replace with your proof link
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-1 hover:text-blue-500 transition-colors duration-200"
