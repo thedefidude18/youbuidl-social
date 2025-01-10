@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { User, useOrbis } from "@orbisclub/components";
 import { shortAddress } from "../utils";
 import { CommentsIcon, ShareIcon } from "./Icons";
 import ReactTimeAgo from 'react-time-ago';
+import Image from 'next/image';
 
 export default function PostItem({ post, isLastPost }) {
   const { orbis, user } = useOrbis();
@@ -32,10 +33,10 @@ export default function PostItem({ post, isLastPost }) {
         console.error("Error fetching reaction:", error);
       }
     }
-  }, [user]);
+  }, [user, orbis, post.stream_id]); // Add missing dependencies
 
   /** Will like / upvote the post */
-  async function like() {
+  const like = useCallback(async () => {
     if (user) {
       setHasLiked(true);
       setIsAnimating(true); // Trigger animation
@@ -54,10 +55,10 @@ export default function PostItem({ post, isLastPost }) {
     } else {
       alert("You must be connected to react to posts.");
     }
-  }
+  }, [user, orbis, post.stream_id, updatedPost, post.count_likes]);
 
   /** Will clean description by shortening it and remove some markdown structure */
-  function cleanDescription() {
+  const cleanDescription = useCallback(() => {
     if (post.content?.body) {
       let desc = post.content.body;
       const regexImage = /\!\[Image ALT tag\]\((.*?)\)/;
@@ -70,7 +71,7 @@ export default function PostItem({ post, isLastPost }) {
       }
     }
     return null;
-  }
+  }, [post.content]);
 
   return (
     <>
