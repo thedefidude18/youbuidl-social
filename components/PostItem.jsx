@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { User, useOrbis } from "@orbisclub/components";
 import { shortAddress } from "../utils";
-import { CommentsIcon } from "./Icons";
+import { CommentsIcon, ShareIcon } from "./Icons";
 import ReactTimeAgo from 'react-time-ago';
 
 export default function PostItem({ post, isLastPost }) {
@@ -95,7 +95,7 @@ export default function PostItem({ post, isLastPost }) {
             {/* Post Description */}
             <p className="text-sm text-gray-700 mt-1">{cleanDescription()}</p>
 
-            {/* Post Actions (Upvote, Comments, Proof Badge) */}
+            {/* Post Actions (Upvote, Comments, Share, Proof Badge) */}
             <div className="flex items-center mt-3 space-x-6 text-gray-500">
               {/* Upvote Button */}
               <button
@@ -131,6 +131,12 @@ export default function PostItem({ post, isLastPost }) {
                   <span>{post.count_replies}</span>
                 </Link>
               )}
+
+              {/* Share Button */}
+              <button className="flex items-center space-x-1 hover:text-blue-500 transition-colors duration-200">
+                <ShareIcon className="w-5 h-5" />
+                <span>Share</span>
+              </button>
 
               {/* Proof Badge */}
               {post.stream_id && (
