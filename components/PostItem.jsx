@@ -90,7 +90,7 @@ export default function PostItem({ post, isLastPost }) {
               <span className="block text-sm text-gray-700 mt-1">{cleanDescription()}</span>
             </p>
 
-            {/* Post Actions (Upvote, Comments) */}
+            {/* Post Actions (Upvote, Comments, Proof Badge) */}
             <div className="flex items-center mt-3 space-x-6 text-gray-500">
               {/* Upvote Button */}
               <button
@@ -123,6 +123,32 @@ export default function PostItem({ post, isLastPost }) {
                   <CommentsIcon className="w-5 h-5" />
                   <span>{post.count_replies}</span>
                 </Link>
+              )}
+
+              {/* Proof Badge */}
+              {post.stream_id && (
+                <a
+                  href={`https://cerscan.com/${post.stream_id}`} // Replace with your proof link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-1 hover:text-blue-500 transition-colors duration-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>Proof</span>
+                </a>
               )}
             </div>
           </div>
