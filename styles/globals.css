@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .post-card {
+    @apply bg-white rounded-lg p-4 mb-4 border border-gray-200 hover:shadow-sm transition-shadow duration-200;
+  }
+  .post-title {
+    @apply text-lg font-semibold text-gray-900 mt-1 hover:underline;
+  }
+  .post-description {
+    @apply text-sm text-gray-700 mt-1;
+  }
+  .post-actions {
+    @apply flex items-center mt-3 space-x-6 text-gray-500;
+  }
+  .action-button {
+    @apply flex items-center space-x-1 hover:text-blue-500 transition-colors duration-200;
+  }
+}
+
 @font-face {
   font-family: "Poppins";
   font-weight: 400;
