@@ -60,7 +60,7 @@ export default function PostItem({ post, isLastPost }) {
 
   return (
     <>
-      <div className="border-b border-gray-200 p-4 hover:bg-gray-50 transition-colors duration-200">
+      <div className="bg-white rounded-lg p-4 mb-4 border border-gray-200 hover:shadow-sm transition-shadow duration-200">
         <div className="flex flex-row items-start space-x-3">
           {/* User Avatar */}
           <div className="flex-shrink-0">
@@ -80,15 +80,15 @@ export default function PostItem({ post, isLastPost }) {
               </span>
             </div>
 
+            {/* Post Title */}
+            <h2 className="text-lg font-semibold text-gray-900 mt-1">
+              <Link href={"/post/" + post.stream_id} className="hover:underline">
+                {post.content.title}
+              </Link>
+            </h2>
+
             {/* Post Description */}
-            <p className="text-base text-gray-900 mt-1">
-              {post.content.title && (
-                <Link href={"/post/" + post.stream_id} className="hover:underline">
-                  {post.content.title}
-                </Link>
-              )}
-              <span className="block text-sm text-gray-700 mt-1">{cleanDescription()}</span>
-            </p>
+            <p className="text-sm text-gray-700 mt-1">{cleanDescription()}</p>
 
             {/* Post Actions (Upvote, Comments, Proof Badge) */}
             <div className="flex items-center mt-3 space-x-6 text-gray-500">
