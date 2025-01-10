@@ -31,6 +31,24 @@ module.exports = {
         wider: '0.02em',
         widest: '0.4em',
       },
+      // Add custom keyframes and animations
+      keyframes: {
+        bounce: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-5px)' },
+        },
+      },
+      animation: {
+        bounce: 'bounce 0.4s ease-in-out',
+      },
+      // Add custom colors
+      colors: {
+        brand: {
+          400: '#988AF9',
+          500: '#5D43FB',
+          hover: '#4C33E5',
+        },
+      },
     },
   },
   plugins: [
@@ -38,4 +56,4 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography')
   ],
-}
+};
